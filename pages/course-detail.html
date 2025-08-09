@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Course Details | I-Cad </title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Specific styles for course detail page */
+    .course-detail-section {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .course-detail-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b3a55;
+    }
+    .course-meta {
+      background: #e0e6ed;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .course-meta p {
+      margin: 0;
+      color: #2b3a55;
+      font-size: 1.05rem;
+    }
+    .course-description {
+      margin-bottom: 30px;
+      line-height: 1.6;
+      color: #444;
+    }
+    .lessons-container {
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+    .lessons-container h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b3a55;
+      font-size: 1.5rem;
+    }
+    .lesson-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+    .lesson-item h4 {
+      color: #2b3a55;
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+    .lesson-item p {
+      color: #555;
+      line-height: 1.6;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+    .error-message {
+      color: crimson;
+      text-align: center;
+      padding: 1rem;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-left: auto;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+    }
+    nav.dashboard-nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    /* Add these styles to your css/style.css file for global use */
+    .user-display-name {
+      color: #ffd700;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .profile-icon-link {
+      display: flex;
+      align-items: center;
+      margin-left: 10px; /* Adjust spacing as needed */
+    }
+    .profile-icon {
+      width: 30px; /* Adjust size as needed */
+      height: 30px;
+      border-radius: 50%; /* Makes it circular */
+      object-fit: cover;
+      border: 2px solid #ffd700; /* Optional: border around icon */
+      transition: transform 0.2s ease-in-out;
+    }
+    .profile-icon:hover {
+      transform: scale(1.1); /* Slightly enlarge on hover */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>I-Cad</h1>
+    <nav class="dashboard-nav">
+      <a href="student-dashboard.html" class="nav-link">← Browse Courses</a>
+      <a href="student-enrolled-courses.html" class="nav-link">My Enrolled Courses</a>
+      <div class="nav-spacer"></div>
+      <span id="user-display-name" class="user-display-name"></span>
+      <a href="profile.html" id="profile-icon-link" class="profile-icon-link" aria-label="Profile">
+          <img src="../assets/profile-icon.png" alt="Profile" class="profile-icon">
+      </a>
+      <button type="button" id="logout-btn" class="logout-btn" aria-label="Logout">Logout</button>
+    </nav>
+  </header>
+  <main>
+    <section class="course-detail-section">
+      <h2 id="course-title-display">Loading Course...</h2>
+      <div class="course-meta">
+        <p>Instructor: <span id="course-instructor-display">N/A</span></p>
+        <p>Enrolled: <span id="course-enrolled-date-display">N/A</span></p>
+      </div>
+      <p id="course-description-display" class="course-description">Loading description...</p>
+
+      <div class="lessons-container">
+        <h3>Course Lessons</h3>
+        <div id="lessons-list-student">
+          <p class="empty-state">Loading lessons...</p>
+        </div>
+      </div>
+      <p id="course-detail-error" class="error-message"></p>
+    </section>
+ 
+  </main>
+  <footer>
+    <p>&copy; 2025 I-Cad</p>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script defer src="../js/course-detail.js"></script>
+  <script>
+    // Small script to populate user name and icon on pages not using main.js
+    auth.onAuthStateChanged(user => {
+      const userDisplayNameSpan = document.getElementById('user-display-name');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      if (user && userDisplayNameSpan) {
+        db.collection('users').doc(user.uid).get().then(userDoc => {
+          if (userDoc.exists) {
+            const role = userDoc.data().role;
+            userDisplayNameSpan.textContent = role.charAt(0).toUpperCase() + role.slice(1); // "Student" or "Teacher"
+          } else {
+            userDisplayNameSpan.textContent = 'User';
+          }
+        }).catch(error => {
+          console.error("Error fetching user role for display:", error);
+          userDisplayNameSpan.textContent = 'User';
+        });
+      } else {
+        // If not logged in, redirect to login
+        window.location.href = "login.html";
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          auth.signOut().then(() => {
+            window.location.href = "login.html";
+          }).catch((error) => {
+            console.error("Logout Error:", error);
+            alert("Error logging out: " + error.message);
+          });
+        });
+      }
+    });
+
+    // Redirect to course detail with courseId when a course is clicked
+    function onCourseClick(courseId) {
+      window.location.href = `course-detail.html?courseId=${courseId}`;
+    }
+  </script>
+</body>
+</html>

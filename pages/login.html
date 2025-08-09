@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | I-Cad </title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header>
+    <h1>I-Cad</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Login</h2>
+      <form id="login-form">
+        <input type="email" id="login-email" placeholder="Email" required><br><br>
+        <input type="password" id="login-password" placeholder="Password" required><br><br>
+        <button type="submit" class="btn-primary">Login</button>
+        <p><a href="#" id="forgot-password-link" style="display: inline-block; margin-top: 10px; cursor: pointer; color: #2b3a55; text-decoration: underline;">Forgot Password?</a></p>
+      </form>
+      <p id="login-error" style="color:crimson; margin-top:10px;"></p>
+      <p>
+        Don't have an account? <a href="signup.html">Sign Up</a>
+      </p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 I-Cad</p>
+  </footer>
+  <!-- Firebase SDKs: App, Auth, Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/login.js"></script>
+</body>
+</html>

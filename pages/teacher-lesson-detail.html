@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Teacher Lesson Details | I-Cad </title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Specific styles for teacher lesson detail page */
+    .lesson-detail-section {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: left;
+      padding: 0 15px;
+    }
+    .lesson-detail-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b3a55;
+      font-size: 2rem;
+    }
+    .lesson-content-display {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(43,58,85,0.08);
+      margin-bottom: 30px;
+      line-height: 1.8;
+      color: #333;
+      font-size: 1.1rem;
+      white-space: pre-wrap; /* Preserve whitespace and line breaks */
+    }
+    .edit-lesson-form {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border: 1px solid #eee;
+      display: none; /* Hidden by default */
+    }
+    .edit-lesson-form input[type="text"],
+    .edit-lesson-form textarea {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      min-height: 80px;
+      resize: vertical;
+    }
+    .edit-lesson-form button {
+      background: #2b3a55;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-right: 10px;
+    }
+    .edit-lesson-form button:hover {
+      background: #ffd700;
+      color: #2b3a55;
+    }
+    .comments-section {
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+      padding-top: 30px;
+    }
+    .comments-section h3 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #2b3a55;
+      font-size: 1.6rem;
+    }
+    .comment-form {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border: 1px solid #eee;
+    }
+    .comment-form textarea {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      min-height: 80px;
+      resize: vertical;
+    }
+    .comment-form button {
+      background: #2b3a55;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .comment-form button:hover {
+      background: #ffd700;
+      color: #2b3a55;
+    }
+    .comments-list {
+      max-height: 400px; /* Limit height for scrollability */
+      overflow-y: auto;
+      padding-right: 10px; /* Space for scrollbar */
+    }
+    .comment-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .comment-item p {
+      margin: 0 0 5px 0;
+      color: #444;
+      line-height: 1.5;
+    }
+    .comment-meta {
+      font-size: 0.85rem;
+      color: #777;
+      text-align: right;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+    .error-message {
+      color: crimson;
+      text-align: center;
+      padding: 1rem;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-left: auto;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+    }
+    nav.dashboard-nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    /* Add these styles to your css/style.css file for global use */
+    .user-display-name {
+      color: #ffd700;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .profile-icon-link {
+      display: flex;
+      align-items: center;
+      margin-left: 10px; /* Adjust spacing as needed */
+    }
+    .profile-icon {
+      width: 30px; /* Adjust size as needed */
+      height: 30px;
+      border-radius: 50%; /* Makes it circular */
+      object-fit: cover;
+      border: 2px solid #ffd700; /* Optional: border around icon */
+      transition: transform 0.2s ease-in-out;
+    }
+    .profile-icon:hover {
+      transform: scale(1.1); /* Slightly enlarge on hover */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>I-Cad</h1>
+    <nav class="dashboard-nav">
+      <a href="teacher-dashboard.html" class="nav-link">← Dashboard</a>
+      <div class="nav-spacer"></div>
+      <span id="user-display-name" class="user-display-name"></span>
+      <a href="profile.html" id="profile-icon-link" class="profile-icon-link" aria-label="Profile">
+          <img src="../assets/profile-icon.png" alt="Profile" class="profile-icon">
+      </a>
+      <button type="button" id="logout-btn" class="logout-btn" aria-label="Logout">Logout</button>
+    </nav>
+  </header>
+  <main>
+    <section class="lesson-detail-section">
+      <h2 id="lesson-title-display">Loading Lesson...</h2>
+      <button id="edit-lesson-btn" class="course-action-btn" style="margin-bottom: 20px;">Edit Lesson</button>
+      <div id="lesson-content-display" class="lesson-content-display">Loading content...</div>
+      <p id="lesson-detail-error" class="error-message"></p>
+
+      <!-- Edit Lesson Form (hidden by default) -->
+      <div id="edit-lesson-form" class="edit-lesson-form">
+        <h3>Edit Lesson Content</h3>
+        <input type="text" id="edit-lesson-title" placeholder="Lesson Title" required>
+        <textarea id="edit-lesson-content" placeholder="Lesson Content" required></textarea>
+        <button id="save-edited-lesson-btn">Save Changes</button>
+        <button id="cancel-edit-lesson-btn" style="background-color: #6c757d;">Cancel</button>
+      </div>
+
+      <div class="comments-section">
+        <h3>Comments</h3>
+        <div class="comment-form">
+          <textarea id="comment-input" placeholder="Add a comment..." required></textarea>
+          <button id="add-comment-btn">Post Comment</button>
+          <p id="comment-error" class="error-message"></p>
+        </div>
+        <div class="comments-list" id="comments-list">
+          <p class="empty-state">No comments yet. Be the first to comment!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 I-Cad </p>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script defer src="../js/teacher-lesson-detail.js"></script>
+  <script>
+    // Small script to populate user name and icon on pages not using main.js
+    auth.onAuthStateChanged(user => {
+      const userDisplayNameSpan = document.getElementById('user-display-name');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      if (user && userDisplayNameSpan) {
+        db.collection('users').doc(user.uid).get().then(userDoc => {
+          if (userDoc.exists) {
+            const role = userDoc.data().role;
+            userDisplayNameSpan.textContent = role.charAt(0).toUpperCase() + role.slice(1); // "Student" or "Teacher"
+          } else {
+            userDisplayNameSpan.textContent = 'User';
+          }
+        }).catch(error => {
+          console.error("Error fetching user role for display:", error);
+          userDisplayNameSpan.textContent = 'User';
+        });
+      } else {
+        // If not logged in, redirect to login
+        window.location.href = "login.html";
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          auth.signOut().then(() => {
+            window.location.href = "login.html";
+          }).catch((error) => {
+            console.error("Logout Error:", error);
+            alert("Error logging out: " + error.message);
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

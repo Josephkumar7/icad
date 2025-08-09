@@ -1,0 +1,560 @@
+/* Reset some default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f9fb;
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styles */
+header {
+  background: #2b3a55;
+  color: #fff;
+  padding: 1rem 2rem; /* Adjusted padding for better look */
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(43,58,85,0.07);
+  display: flex; /* Use flexbox for header content */
+  justify-content: space-between; /* Space out items */
+  align-items: center; /* Vertically align items */
+}
+
+header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0; /* Remove margin for flex alignment */
+  letter-spacing: 1px;
+  color: #ffd700; /* Gold color for the title */
+}
+
+nav {
+  margin-bottom: 0; /* Remove margin for flex alignment */
+  display: flex; /* Ensure nav itself is a flex container */
+  align-items: center; /* Align items vertically */
+  gap: 1.5rem; /* Space between nav items */
+}
+
+nav a {
+  color: #e0e6ed;
+  text-decoration: none;
+  margin: 0; /* Remove individual margins as gap handles spacing */
+  font-size: 1.05rem;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #ffd700;
+}
+
+/* Main content styles */
+main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start; /* Align items to the start (top) */
+  justify-content: center;
+  padding: 32px 10px;
+}
+
+section {
+  background: #fff;
+  padding: 32px 28px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(43,58,85,0.08);
+  max-width: 1200px; /* Increased for dashboard */
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+section h2 {
+  color: #2b3a55;
+  margin-bottom: 12px;
+  font-size: 1.8rem; /* Slightly larger for dashboard titles */
+}
+
+section p {
+  color: #555;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+/* Footer styles */
+footer {
+  background: #2b3a55;
+  color: #e0e6ed;
+  text-align: center;
+  padding: 14px 0 12px 0;
+  font-size: 0.98rem;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+/* Course Card Styles */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 24px;
+  margin-top: 24px;
+  justify-items: center;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(43,58,85,0.10);
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 14px 16px 14px;
+  transition: box-shadow 0.2s;
+}
+
+.course-card:hover {
+  box-shadow: 0 4px 20px rgba(43,58,85,0.18);
+}
+
+.course-thumb {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  background: #e0e6ed;
+}
+
+.course-info {
+  text-align: center;
+  width: 100%; /* Ensure info takes full width */
+}
+
+.course-title {
+  font-size: 1.13rem;
+  margin-bottom: 6px;
+  color: #2b3a55;
+}
+
+.course-instructor {
+  font-size: 0.98rem;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.course-action-btn {
+  background: #2b3a55;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 12px;
+  box-shadow: 0 4px 8px rgba(43,58,85,0.15);
+}
+
+.course-action-btn:hover {
+  background: #ffd700;
+  color: #2b3a55;
+  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.5);
+}
+
+.add-course-btn {
+  background: #ffd700;
+  color: #2b3a55;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 28px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+}
+
+.add-course-btn:hover {
+  background: #2b3a55;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(43, 58, 85, 0.6);
+}
+
+/* Responsive design for course grid */
+@media (max-width: 1200px) {
+  .course-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .course-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+    width: 98vw; /* Adjust card width for small screens */
+    padding: 10px 4px 12px 4px; /* Adjust card padding */
+  }
+}
+
+/* Header Navigation Specifics */
+.dashboard-nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-spacer {
+  flex-grow: 1; /* Pushes elements to the right */
+}
+
+.user-display-name {
+  color: #ffd700;
+  font-weight: bold;
+  margin-left: 4px;
+}
+.profile-icon-link {
+  display: flex;
+  align-items: center;
+  margin-left: 4px; /* Adjust spacing as needed */
+}
+.profile-icon {
+  width: 30px; /* Adjust size as needed */
+  height: 30px;
+  border-radius: 50%; /* Makes it circular */
+  object-fit: cover;
+  border: 2px solid #ffd700; /* Optional: border around icon */
+  transition: transform 0.2s ease-in-out;
+}
+.profile-icon:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+.logout-btn {
+  background: #dc3545;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  margin-left: 10px; /* Adjust spacing as needed */
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.3s;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+}
+.logout-btn:hover {
+  background: #c82333;
+  box-shadow: 0 6px 12px rgba(200, 35, 51, 0.6);
+}
+
+/* Global input and select styles for bigger and attractive text boxes */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  padding: 14px 20px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(43, 58, 85, 0.1);
+  height: 48px;
+}
+
+#signup-username {
+  font-size: 1rem;
+  padding: 8px 20px;
+}
+
+input::placeholder {
+  font-size: 1rem;
+  color: #888;
+}
+
+#signup-username::placeholder {
+  padding-left: 0;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: #2b3a55;
+  box-shadow: 0 0 8px rgba(43, 58, 85, 0.5);
+  outline: none;
+}
+
+/* Primary button style for login and signup buttons */
+.btn-primary {
+  background-color: #2b3a55;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 8px rgba(43, 58, 85, 0.15);
+  width: 100%;
+  max-width: 400px;
+  margin-top: 12px;
+}
+
+.btn-primary:hover {
+  background-color: #ffd700;
+  color: #2b3a55;
+  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.5);
+}
+
+/* Badge card styling */
+.badge-card {
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fffbea;
+  width: 200px;
+  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.badge-card .badge-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.badge-card p {
+  margin: 0 0 5px 0;
+  text-align: center;
+}
+
+.badge-card p.course-id {
+  font-weight: bold;
+}
+
+.badge-card p.completed-at {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Lessons list styling */
+#lessons-list {
+  text-align: left;
+  margin-top: 15px;
+}
+
+.lesson-item {
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background-color: #f7f9fc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lesson-item h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2b3a55;
+  flex-grow: 1;
+}
+
+.lesson-controls {
+  margin-left: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Lesson management buttons */
+.lesson-controls button,
+.content-option-btn,
+.course-action-btn,
+.add-question-btn {
+  background-color: #2b3a55;
+  color: white;
+  border: 1px solid #2b3a55;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-right: 8px;
+}
+
+.lesson-controls button:hover,
+.content-option-btn:hover,
+.course-action-btn:hover,
+.add-question-btn:hover {
+  background-color: #1a2436;
+  border-color: #1a2436;
+}
+
+.lesson-controls button.delete-lesson-btn {
+  background-color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.lesson-controls button.delete-lesson-btn:hover {
+  background-color: #b02a37;
+  border-color: #b02a37;
+}
+
+/* Disabled buttons */
+.content-option-btn:disabled,
+.course-action-btn:disabled {
+  background-color: #999999;
+  border-color: #999999;
+  cursor: not-allowed;
+}
+
+/* Form inputs */
+input[type="text"],
+textarea {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: #2b3a55;
+  outline: none;
+}
+
+/* Toggle switch styling */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2b3a55;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Professional quiz creation box styling */
+.quiz-creation-box {
+  background: #f4f8fb;
+  border: 1.5px solid #b6c6d7;
+  border-radius: 10px;
+  padding: 24px 20px 16px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(43,58,85,0.06);
+}
+
+.quiz-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #2b3a55;
+}
+
+.quiz-input {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 1px solid #b6c6d7;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.quiz-options-list {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.option-input {
+  flex: 1;
+}
+
+.quiz-answer-row {
+  margin-bottom: 16px;
+}
+
+.quiz-answers-list label {
+  margin-right: 24px;   /* More space between options */
+  font-weight: 500;
+  display: inline-block;
+  min-width: 90px;      /* Ensures spacing even if option text is short */
+}
+
+.delete-question-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.delete-question-btn:hover {
+  background: #c0392b;
+}
+
+.add-question-btn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 22px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.add-question-btn:hover {
+  background: #219150;
+}

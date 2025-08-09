@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Enrolled Courses | I-Cad</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header>
+    <h1>My Enrolled Courses</h1>
+    <nav class="dashboard-nav">
+      <a href="../index.html">Home</a>
+      <a href="student-dashboard.html" class="nav-link">← Browse Courses</a>
+      <div class="nav-spacer"></div>
+      <span id="user-display-name" class="user-display-name"></span>
+      <a href="profile.html" id="profile-icon-link" class="profile-icon-link" aria-label="Profile">
+          <img src="../assets/profile-icon.png" alt="Profile" class="profile-icon">
+      </a>
+      <button type="button" id="logout-btn" class="logout-btn" aria-label="Logout">Logout</button>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>My Enrolled Courses</h2>
+      <div class="course-grid" id="enrolled-courses-grid">
+        <!-- Enrolled courses will be loaded here dynamically -->
+        <p class="empty-state">Loading your enrolled courses...</p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 I-Cad</p>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script defer src="../js/student-enrolled-courses.js"></script>
+  <script>
+    // Small script to populate user name and icon on pages not using main.js
+    auth.onAuthStateChanged(user => {
+      const userDisplayNameSpan = document.getElementById('user-display-name');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      if (user && userDisplayNameSpan) {
+        db.collection('users').doc(user.uid).get().then(userDoc => {
+          if (userDoc.exists) {
+            const role = userDoc.data().role;
+            userDisplayNameSpan.textContent = role.charAt(0).toUpperCase() + role.slice(1); // "Student" or "Teacher"
+          } else {
+            userDisplayNameSpan.textContent = 'User';
+          }
+        }).catch(error => {
+          console.error("Error fetching user role for display:", error);
+          userDisplayNameSpan.textContent = 'User';
+        });
+      } else {
+        // If not logged in, redirect to login
+        window.location.href = "login.html";
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          auth.signOut().then(() => {
+            window.location.href = "login.html";
+          }).catch((error) => {
+            console.error("Logout Error:", error);
+            alert("Error logging out: " + error.message);
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

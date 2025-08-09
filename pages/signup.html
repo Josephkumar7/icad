@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up | I-Cad</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>I-Cad</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Sign Up</h2>
+      <form id="signup-form">
+        <input type="text" id="signup-username" placeholder="Username" required /><br /><br />
+        <input type="email" id="signup-email" placeholder="Email" required /><br /><br />
+        <input type="password" id="signup-password" placeholder="Password" required /><br /><br />
+        <select id="signup-role" required>
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select><br /><br />
+        <button type="submit" class="btn-primary">Sign Up</button>
+      </form>
+      <p id="signup-error" style="color:crimson; margin-top:10px;"></p>
+      <p>
+        Already have an account? <a href="login.html">Login</a>
+      </p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 I-Cad </p>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/signup.js"></script>
+</body>
+</html>

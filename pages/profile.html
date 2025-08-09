@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Profile | I-Cad</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .profile-section {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .profile-section h2 {
+      margin-bottom: 20px;
+      color: #2b3a55;
+    }
+    .profile-details p {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .profile-details strong {
+      color: #2b3a55;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-left: 12px;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+    }
+    nav.dashboard-nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .user-display-name {
+      color: #ffd700;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+    .profile-icon-link {
+      display: flex;
+      align-items: center;
+      margin-left: 6px;
+    }
+    .profile-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>I-Cad</h1>
+      <nav class="dashboard-nav">
+        <a href="#" id="dashboard-link" class="nav-link">← Dashboard</a>
+        <div class="nav-spacer"></div>
+        <span id="user-display-name" class="user-display-name"></span>
+        <a href="profile.html" id="profile-icon-link" class="profile-icon-link" aria-label="Profile">
+          <img src="../assets/profile-icon.png" alt="Profile" class="profile-icon" />
+        </a>
+        <button type="button" id="logout-btn" class="logout-btn" aria-label="Logout">Logout</button>
+      </nav>
+  </header>
+
+  <main>
+    <section class="profile-section">
+      <h2>My Profile</h2>
+      <div class="profile-details">
+        <p><strong>Username:</strong> <span id="profile-username">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="profile-email">Loading...</span></p>
+        <p><strong>Role:</strong> <span id="profile-role">Loading...</span></p>
+      </div>
+
+      <!-- Badges Section -->
+      <div id="badges-section">
+        <h2>My Badges</h2>
+        <p id="badge-count">Loading badges...</p>
+        <div id="badges-list" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
+      </div>
+
+      <!-- Coins Section -->
+        <div id="coins-section" style="margin-top: 20px; text-align: center;">
+          <h2>My Coins</h2>
+          <div style="display: inline-flex; align-items: center; gap: 10px; font-size: 1.5rem; justify-content: center;">
+            <span id="coin-icon" style="font-size: 2rem;">🪙</span>
+            <span id="coin-count">Loading coins...</span>
+          </div>
+
+        <!-- Coins Leaderboard under Coins Section -->
+        <div id="coins-leaderboard-section" style="margin-top: 20px;">
+          <h3>Top Students by Coins</h3>
+          <table id="coins-leaderboard" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #ffd700; color: #2b3a55;">
+                <th style="border: 1px solid #ddd; padding: 6px;">Rank</th>
+                <th style="border: 1px solid #ddd; padding: 6px;">Student Name</th>
+                <th style="border: 1px solid #ddd; padding: 6px;">Coins</th>
+              </tr>
+            </thead>
+            <tbody id="coins-leaderboard-body">
+              <tr><td colspan="3" style="text-align: center; padding: 8px;">Loading leaderboard...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 I-Cad </p>
+  </footer>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+
+      <!-- Profile Script -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const profileEmailSpan = document.getElementById('profile-email');
+          const profileRoleSpan = document.getElementById('profile-role');
+          const profileUsernameSpan = document.getElementById('profile-username');
+          const userDisplayNameSpan = document.getElementById('user-display-name');
+          const logoutBtn = document.getElementById('logout-btn');
+          const badgeCountElem = document.getElementById('badge-count');
+          const badgesListElem = document.getElementById('badges-list');
+        const coinCountElem = document.getElementById('coin-count');
+        const dashboardLink = document.getElementById('dashboard-link');
+
+        const coinsLeaderboardBody = document.getElementById('coins-leaderboard-body');
+
+        const leaderboardBody = document.getElementById('leaderboard-body');
+        const currentUserRankDiv = document.getElementById('current-user-rank');
+
+
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              db.collection('users')
+                .doc(user.uid)
+                .get()
+          .then((userDoc) => {
+            if (userDoc.exists) {
+              const userData = userDoc.data();
+              profileEmailSpan.textContent = user.email;
+              profileRoleSpan.textContent = userData.role
+                ? userData.role.charAt(0).toUpperCase() + userData.role.slice(1)
+                : 'N/A';
+              profileUsernameSpan.textContent = userData.username || 'N/A';
+              userDisplayNameSpan.textContent = userData.username || 'User';
+
+              // Load user coins count from combined quizScores and commentedLessons
+              loadUserCoinsCombined(user.uid);
+
+              // Load overall leaderboard by total coins
+              loadOverallLeaderboard(user.uid);
+
+          // Set dashboard link based on role
+          if (userData.role === "teacher") {
+            dashboardLink.href = "teacher-dashboard.html";
+          } else {
+            dashboardLink.href = "student-dashboard.html";
+          }
+
+          // Hide sections for teachers
+          if (userDoc.data().role === "teacher") {
+            const badgesSection = document.getElementById('badges-section');
+            const pointsSection = document.getElementById('points-section');
+            const coinsSection = document.getElementById('coins-section');
+            if (badgesSection) badgesSection.style.display = 'none';
+            if (pointsSection) pointsSection.style.display = 'none';
+            if (coinsSection) coinsSection.style.display = 'none';
+          } else {
+            loadUserBadges(user.uid);
+            loadUserPoints(user.uid); // Only keep this
+          }
+            } else {
+              profileEmailSpan.textContent = user.email;
+              profileRoleSpan.textContent = 'Unknown';
+              profileUsernameSpan.textContent = 'N/A';
+              userDisplayNameSpan.textContent = 'User';
+              badgeCountElem.textContent = 'No badges earned yet.';
+              coinCountElem.textContent = '0';
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching user data:', error);
+            profileEmailSpan.textContent = user.email;
+            profileRoleSpan.textContent = 'Error';
+            profileUsernameSpan.textContent = 'N/A';
+            userDisplayNameSpan.textContent = 'User';
+            badgeCountElem.textContent = 'Error loading badges.';
+            coinCountElem.textContent = 'Error loading coins.';
+          });
+            } else {
+              window.location.href = 'login.html';
+            }
+          });
+
+          function loadOverallLeaderboard(currentUserId) {
+            const db = firebase.firestore();
+            db.collection('users')
+              .orderBy('totalCoins', 'desc')
+              .limit(50)
+              .get()
+              .then(snapshot => {
+                if (snapshot.empty) {
+                  leaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No data available.</td></tr>';
+                  return;
+                }
+
+                let rank = 1;
+                let currentUserRank = null;
+                leaderboardBody.innerHTML = '';
+
+                snapshot.forEach(doc => {
+                  const data = doc.data();
+                  const username = data.username || data.email || 'Unknown';
+                  const coins = data.totalCoins || 0;
+
+                  const tr = document.createElement('tr');
+                  tr.innerHTML = `
+                    <td style="border: 1px solid #ddd; padding: 8px;">${rank}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${username}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${coins}</td>
+                  `;
+
+                  if (doc.id === currentUserId) {
+                    tr.style.backgroundColor = '#ffe066';
+                    tr.style.fontWeight = 'bold';
+                    currentUserRank = rank;
+                  }
+
+                  leaderboardBody.appendChild(tr);
+                  rank++;
+                });
+
+                if (currentUserRank !== null) {
+                  currentUserRankDiv.textContent = `Your Rank: ${currentUserRank} | Total Coins: ${snapshot.docs.find(doc => doc.id === currentUserId).data().totalCoins || 0}`;
+                } else {
+                  currentUserRankDiv.textContent = 'You are not ranked yet.';
+                }
+              })
+              .catch(error => {
+                console.error('Error loading leaderboard:', error);
+                leaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Error loading leaderboard.</td></tr>';
+                currentUserRankDiv.textContent = '';
+              });
+          }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          auth.signOut().then(() => {
+            window.location.href = 'login.html';
+          }).catch((error) => {
+            console.error('Logout Error:', error);
+            alert('Error logging out: ' + error.message);
+          });
+        });
+      }
+
+      // Load coins leaderboard under coins section
+      async function loadCoinsLeaderboard() {
+        const db = firebase.firestore();
+        coinsLeaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Loading leaderboard...</td></tr>';
+
+        try {
+          const usersSnapshot = await db.collection('users').get();
+          if (usersSnapshot.empty) {
+            coinsLeaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No students found.</td></tr>';
+            return;
+          }
+
+          const usersWithCoins = [];
+
+          for (const userDoc of usersSnapshot.docs) {
+            const userData = userDoc.data();
+            const userId = userDoc.id;
+
+            // Only consider students
+            if (userData.role !== 'student') continue;
+
+            // Fetch quizScores
+            const quizScoresSnapshot = await db.collection('users').doc(userId).collection('quizScores').get();
+            let totalCoins = 0;
+            quizScoresSnapshot.forEach(doc => {
+              const data = doc.data();
+              totalCoins += data.score || 0;
+            });
+
+            // Fetch commentedLessons
+            const commentedLessonsSnapshot = await db.collection('users').doc(userId).collection('commentedLessons').get();
+            totalCoins += commentedLessonsSnapshot.size;
+
+            usersWithCoins.push({
+              username: userData.username || userData.email || 'Unknown',
+              coins: totalCoins,
+            });
+          }
+
+          // Sort users by coins descending
+          usersWithCoins.sort((a, b) => b.coins - a.coins);
+
+          // Display top 5
+          coinsLeaderboardBody.innerHTML = '';
+          usersWithCoins.slice(0, 5).forEach((user, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style="border: 1px solid #ddd; padding: 6px;">${index + 1}</td>
+              <td style="border: 1px solid #ddd; padding: 6px;">${user.username}</td>
+              <td style="border: 1px solid #ddd; padding: 6px;">${user.coins}</td>
+            `;
+            coinsLeaderboardBody.appendChild(tr);
+          });
+
+        } catch (error) {
+          console.error('Error loading coins leaderboard:', error);
+          coinsLeaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Error loading leaderboard.</td></tr>';
+          alert('Error loading coins leaderboard: ' + error.message);
+        }
+      }
+
+      // Call loadCoinsLeaderboard only for students
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          db.collection('users').doc(user.uid).get().then(userDoc => {
+            if (userDoc.exists && userDoc.data().role === 'student') {
+              loadCoinsLeaderboard();
+            }
+          });
+        }
+      });
+
+      // Load badges
+      function loadUserBadges(userId) {
+        db.collection('users')
+          .doc(userId)
+          .collection('completedCourses')
+          .get()
+          .then((snapshot) => {
+            if (snapshot.empty) {
+              badgeCountElem.textContent = 'No badges earned yet.';
+              return;
+            }
+
+            const badges = [];
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              badges.push({
+                courseId: doc.id,
+                badgeAwarded: data.badgeAwarded,
+                completedAt: data.completedAt ? data.completedAt.toDate().toLocaleDateString() : 'N/A',
+              });
+            });
+
+            badgeCountElem.textContent = `Badges Earned: ${badges.length}`;
+            badgesListElem.innerHTML = '';
+
+            badges.forEach((badge) => {
+              const badgeCard = document.createElement('div');
+              badgeCard.className = 'badge-card';
+              badgeCard.style.border = '1px solid #ffd700';
+              badgeCard.style.borderRadius = '8px';
+              badgeCard.style.padding = '15px';
+              badgeCard.style.backgroundColor = '#fffbea';
+              badgeCard.style.width = '200px';
+              badgeCard.style.boxShadow = '0 2px 6px rgba(255, 215, 0, 0.3)';
+              badgeCard.style.display = 'flex';
+              badgeCard.style.flexDirection = 'column';
+              badgeCard.style.alignItems = 'center';
+
+              const badgeIcon = document.createElement('div');
+              badgeIcon.innerHTML = '🏅';
+              badgeIcon.style.fontSize = '3rem';
+              badgeIcon.style.marginBottom = '10px';
+
+              const courseIdText = document.createElement('p');
+              courseIdText.textContent = `Course ID: ${badge.courseId}`;
+              courseIdText.style.fontWeight = 'bold';
+              courseIdText.style.marginBottom = '5px';
+
+              const completedAtText = document.createElement('p');
+              completedAtText.textContent = `Completed: ${badge.completedAt}`;
+              completedAtText.style.fontSize = '0.9rem';
+              completedAtText.style.color = '#555';
+
+              badgeCard.appendChild(badgeIcon);
+              badgeCard.appendChild(courseIdText);
+              badgeCard.appendChild(completedAtText);
+              badgesListElem.appendChild(badgeCard);
+            });
+          })
+          .catch((error) => {
+            console.error('Error loading badges:', error);
+            badgeCountElem.textContent = 'Error loading badges.';
+          });
+      }
+
+      // Load points
+      function loadUserPoints(userId) {
+        db.collection('users').doc(userId).get()
+          .then(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              document.getElementById('points-total').textContent = data.points || 0;
+            } else {
+              document.getElementById('points-total').textContent = 0;
+            }
+          })
+          .catch(error => {
+            console.error('Error loading points:', error);
+            document.getElementById('points-total').textContent = 'Error loading points.';
+          });
+      }
+
+      // Load user coins count
+      function loadUserCoins(userId) {
+        db.collection('users').doc(userId).get()
+          .then(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              const coins = data.totalCoins || 0;
+              document.getElementById('coin-count').textContent = coins;
+            } else {
+              document.getElementById('coin-count').textContent = '0';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading coins:', error);
+            document.getElementById('coin-count').textContent = 'Error loading coins.';
+          });
+      }
+      
+      // Load user coins count from combined quizScores and commentedLessons
+      function loadUserCoinsCombined(userId) {
+        const db = firebase.firestore();
+        let totalCoins = 0;
+
+        // Get quiz scores coins
+        db.collection('users').doc(userId).collection('quizScores').get()
+          .then(quizSnapshot => {
+            quizSnapshot.forEach(doc => {
+              const data = doc.data();
+              totalCoins += data.score || 0;
+            });
+
+            // Get comment coins
+            db.collection('users').doc(userId).collection('commentedLessons').get()
+              .then(commentSnapshot => {
+                totalCoins += commentSnapshot.size;
+
+                // Update coin count display
+                document.getElementById('coin-count').textContent = totalCoins;
+              })
+              .catch(error => {
+                console.error('Error loading comment coins:', error);
+                document.getElementById('coin-count').textContent = 'Error loading coins.';
+              });
+          })
+          .catch(error => {
+            console.error('Error loading quiz scores:', error);
+            document.getElementById('coin-count').textContent = 'Error loading coins.';
+          });
+      }
+    });
+  </script>
+</body>
+</html>
